@@ -40,3 +40,20 @@ variable "db_allocated_storage" {
   type        = number
   default     = 20
 }
+
+variable "vpc_cidr" {
+  description = "CIDR range for the VPC"
+  type        = string
+  default     = "10.0.0.0/16"
+}
+
+variable "db_allowed_cidr" {
+  description = "Trusted client IP range allowed to access PostgreSQL"
+  type        = string
+}
+
+variable "db_password" {
+  description = "PostgreSQL database password"
+  type        = string
+  sensitive   = true
+}
