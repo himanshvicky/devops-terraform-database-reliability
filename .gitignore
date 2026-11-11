@@ -1,0 +1,19 @@
+
+# Terraform state
+*.tfstate
+*.tfstate.*
+.terraform/
+
+# Terraform variable files containing secrets
+*.tfvars
+*.tfvars.json
+!*.tfvars.example
+
+# Terraform crash logs
+crash.log
+crash.*.log
+
+# Sensitive credentials
+*.pem
+*.key
+.env
