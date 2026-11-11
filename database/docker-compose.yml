@@ -1,0 +1,23 @@
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: assessment-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: bookings
+      POSTGRES_USER: assessment
+      POSTGRES_PASSWORD: local_assessment_password
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./migrations/001_init.sql:/docker-entrypoint-initdb.d/01_init.sql:ro
+      - ./seed/002_seed.sql:/docker-entrypoint-initdb.d/02_seed.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U assessment -d bookings"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+volumes:
+  postgres_data:
