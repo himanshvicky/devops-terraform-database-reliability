@@ -1,17 +1,4 @@
 
-# Additional variables required for infrastructure
-
-variable "vpc_cidr" {
-  description = "CIDR range for the VPC"
-  type        = string
-  default     = "10.0.0.0/16"
-}
-
-variable "db_password" {
-  description = "PostgreSQL database password"
-  type        = string
-  sensitive   = true
-}
 
 # Get available AWS availability zones
 
@@ -58,7 +45,7 @@ resource "aws_security_group" "database" {
     from_port   = 5432
     to_port     = 5432
     protocol    = "tcp"
-    cidr_blocks = [var.vpc_cidr]
+    cidr_blocks = [var.db_allowed_cidr]
   }
 
   egress {
@@ -111,8 +98,9 @@ resource "aws_db_instance" "postgres" {
   backup_retention_period = 7
   copy_tags_to_snapshot   = true
 
-  deletion_protection = false
-  skip_final_snapshot = true
+  deletion_protection = true
+  skip_final_snapshot = false
+  final_snapshot_identifier = "${var.project_name}-${var.environment}-final-snapshot"
 
   tags = {
     Name        = "${var.project_name}-postgres"
